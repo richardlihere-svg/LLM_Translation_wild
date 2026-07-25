@@ -1,0 +1,14 @@
+# Python 虚拟环境与缓存
+App/.venv/
+__pycache__/
+*.pyc
+
+# 运行数据：输出、日志、缓存、用户配置（保留目录结构，不提交内容）
+Data/output/*
+Data/logs/*
+Data/cache/*
+Data/config/*
+!Data/output/.gitkeep
+!Data/logs/.gitkeep
+!Data/cache/.gitkeep
+!Data/config/.gitkeep

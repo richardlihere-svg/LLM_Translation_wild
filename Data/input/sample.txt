@@ -1,0 +1,5 @@
+Welcome to the Local LLM Document Translator.
+
+This is a small sample document used to verify that the translation pipeline works end to end. It reads this text file, splits it into paragraphs, sends each paragraph to a local language model running through Ollama, and writes the translated result into the Data/output folder.
+
+If you can read a Chinese translation of this text in the output folder, the setup is working correctly.

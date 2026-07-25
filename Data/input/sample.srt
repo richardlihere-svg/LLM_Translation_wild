@@ -1,0 +1,12 @@
+1
+00:00:01,000 --> 00:00:03,500
+Good morning, everyone.
+
+2
+00:00:03,600 --> 00:00:06,000
+Welcome back to the show.
+Today we have a special guest.
+
+3
+00:00:06,100 --> 00:00:09,000
+Thanks for having me, it's great to be here.

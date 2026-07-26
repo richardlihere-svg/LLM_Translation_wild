@@ -15,6 +15,13 @@ import logger as logger_mod
 import readers
 import translator
 
+try:
+    from tkinterdnd2 import DND_FILES, TkinterDnD
+
+    HAS_DND = True
+except ImportError:
+    HAS_DND = False
+
 STYLES = ["通顺", "直译", "wild"]
 
 STATUS_PENDING = "待处理"
@@ -91,7 +98,8 @@ class TranslatorApp:
         )
 
         # ---- 文件队列 ----
-        queue_frame = ttk.LabelFrame(self.root, text="文件队列（按顺序依次翻译）")
+        queue_label = "文件队列（按顺序依次翻译，可将文件/文件夹拖拽到下方列表）" if HAS_DND else "文件队列（按顺序依次翻译）"
+        queue_frame = ttk.LabelFrame(self.root, text=queue_label)
         queue_frame.pack(fill="both", expand=False, padx=10, pady=5)
 
         tree_container = ttk.Frame(queue_frame)
@@ -108,6 +116,12 @@ class TranslatorApp:
         self.queue_tree.configure(yscrollcommand=tree_scroll.set)
         self.queue_tree.pack(side="left", fill="both", expand=True)
         tree_scroll.pack(side="right", fill="y")
+
+        if HAS_DND:
+            self.queue_tree.drop_target_register(DND_FILES)
+            self.queue_tree.dnd_bind("<<Drop>>", self._on_drop_files)
+            tree_container.drop_target_register(DND_FILES)
+            tree_container.dnd_bind("<<Drop>>", self._on_drop_files)
 
         queue_btn_frame = ttk.Frame(queue_frame)
         queue_btn_frame.pack(fill="x", padx=6, pady=6)
@@ -190,14 +204,34 @@ class TranslatorApp:
         for p in sorted(found):
             self._add_queue_item(p)
 
-    def _add_queue_item(self, path: Path):
+    def _add_queue_item(self, path: Path) -> bool:
         if not path.exists() or path.suffix.lower() not in readers.SUPPORTED_EXTENSIONS:
-            return
+            return False
         iid = str(path.resolve())
         if iid in self.queue_items:
-            return
+            return False
         self.queue_items[iid] = path
         self.queue_tree.insert("", "end", iid=iid, text=path.name, values=(STATUS_PENDING,))
+        return True
+
+    def _on_drop_files(self, event):
+        if self.worker_thread and self.worker_thread.is_alive():
+            return
+        skipped = []
+        for raw in self.root.tk.splitlist(event.data):
+            path = Path(raw)
+            if path.is_dir():
+                for ext in sorted(readers.SUPPORTED_EXTENSIONS):
+                    for f in sorted(path.glob(f"*{ext}")):
+                        self._add_queue_item(f)
+                continue
+            if not self._add_queue_item(path):
+                skipped.append(path.name)
+        if skipped:
+            self._append_log(
+                "warning",
+                f"以下文件未添加（格式不支持或已在队列中）：{', '.join(skipped)}",
+            )
 
     def _remove_selected(self):
         if self.worker_thread and self.worker_thread.is_alive():
@@ -479,8 +513,13 @@ class TranslatorApp:
 def main():
     config.ensure_dirs()
     initial_path = sys.argv[1] if len(sys.argv) > 1 else ""
-    root = tk.Tk()
-    TranslatorApp(root, initial_path=initial_path)
+    root = TkinterDnD.Tk() if HAS_DND else tk.Tk()
+    app = TranslatorApp(root, initial_path=initial_path)
+    if not HAS_DND:
+        app._append_log(
+            "warning",
+            "未安装 tkinterdnd2，暂不支持拖拽添加文件。运行 `pip install -r requirements.txt` 后重启即可启用。",
+        )
     root.mainloop()
 
 

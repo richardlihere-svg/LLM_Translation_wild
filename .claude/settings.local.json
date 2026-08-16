@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where ollama *)",
+      "Bash(where python *)",
+      "Bash(where py *)",
+      "Bash(ollama --version)",
+      "Read(//c/Users/lichu/AppData/Local/Programs//**)",
+      "Read(//c/Program Files//**)",
+      "Bash(nvidia-smi --query-gpu=name,memory.total --format=csv)",
+      "Bash(winget --version)",
+      "Bash(python -c \"import tkinter; print\\('tkinter ok'\\)\")",
+      "Bash(python -c \"import pip; print\\('pip ok'\\)\")",
+      "Bash(python -m venv App/.venv)",
+      "Bash(App/.venv/Scripts/python.exe -m pip install --upgrade pip --quiet)",
+      "Bash(App/.venv/Scripts/python.exe -m pip install -r App/requirements.txt)",
+      "Bash(App/.venv/Scripts/python.exe -m py_compile App/engine/*.py)",
+      "Bash(winget list *)",
+      "Bash(echo \"---exit:$?\")",
+      "Bash(winget install *)",
+      "Bash(curl -s http://127.0.0.1:11434/api/tags)",
+      "Bash(\"/c/Program Files/Ollama/ollama.exe\" --version)",
+      "Bash(\"/c/Users/lichu/AppData/Local/Programs/Ollama/ollama.exe\" --version)",
+      "Bash(\"/c/Users/lichu/AppData/Local/Programs/Ollama/ollama.exe\" pull *)",
+      "Bash(tail -c 500 /c/Users/lichu/AppData/Local/Temp/claude/f--vs-code-repo-LLM-Translation-wild/c16c6760-4086-4cc9-a5e7-406e086bcd72/tasks/bifte89ij.output 2>/dev/null)",
+      "Read(//c/Users/lichu/AppData/Local/Temp/claude/f--vs-code-repo-LLM-Translation-wild/c16c6760-4086-4cc9-a5e7-406e086bcd72/tasks/**)",
+      "Bash(App/.venv/Scripts/python.exe App/engine/_smoke_test.py)",
+      "Bash(App/.venv/Scripts/python.exe -c ' *)",
+      "Bash(rm -f App/engine/_smoke_test.py App/.gitignore)",
+      "Bash(rm -rf \"App/__pycache__\" \"App/engine/__pycache__\" Data/output/* Data/logs/*)",
+      "Bash(App/.venv/Scripts/python.exe App/engine/gui.py)",
+      "Bash(tasklist)",
+      "Bash(powershell -NoProfile -Command \"Add-Type -AssemblyName System.Windows.Forms; Get-Process python | Select-Object Id, MainWindowTitle\")",
+      "Bash(taskkill //PID 17172 //F)",
+      "Bash(rm -f Data/cache/gui_*.png)",
+      "Bash(rm -f Data/output/sample* Data/logs/*.log)",
+      "Bash(cmd //c \"启动翻译器.bat\")",
+      "PowerShell(Get-Process | Where-Object { $_.ProcessName -match \"cmd|conhost|python\" } | Select-Object ProcessName, Id, MainWindowTitle, MainWindowHandle)",
+      "Bash(xxd test_launcher.bat)",
+      "Bash(cmd.exe /c chcp)"
+    ]
+  }
+}
